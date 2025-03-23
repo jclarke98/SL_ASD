@@ -1,0 +1,8 @@
+# Voice embedding extractor parameters
+voice_extract:
+  batch_size: 16
+  data_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_FVA_ASD_pyannote_MD-0.0/audio"                              # Path to audio files
+  manifest_file: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0/annot/audio_manifest.csv"       # CSV with 'fpath' column
+  save_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/dataset/Ego4D"                                                 # Embedding output directory
+  model_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/emb_extractors/models/ecapa_acc0.9854.pkl"                    # Path to pretrained ECAPA-TDNN model
+  n_dataloader_thread: 12

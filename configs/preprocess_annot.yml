@@ -1,0 +1,41 @@
+gt:
+  # Directories and paths
+  audio_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/wave"
+  bigAnnotPath: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/annotations" 
+  output_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth"
+
+  # Utterance segmentation parameters
+  min_utterance_duration: 0      # Minimum duration (seconds) for an utterance #0.1
+
+  # Manifest and split settings
+  val_ratio: 0.1                 # Fraction of training videos for validation
+
+  # Image processing settings
+  process_images: True
+  img_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs"
+  annot_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d"
+
+pyannote:
+  # Directories and paths
+  audio_direc: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/wave
+  bigAnnotPath: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/annotations
+  output_direc: /mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0
+
+  # Pyannote diarization parameters
+  pyannote_pipeline: pyannote/speaker-diarization-3.1
+  pyannote_device: cpu
+  hf_auth_token: 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
+
+  # Utterance segmentation parameters
+  min_utterance_duration: 0.0
+
+  # Matching hyperparameter (overlap threshold for matching hypothesis and ground truth)
+  overlap_threshold: 0.1
+
+  # Manifest and split settings
+  val_ratio: 0.0
+
+  # Image processing settings
+  process_images: false
+  img_path: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs
+  annot_path: /users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d
