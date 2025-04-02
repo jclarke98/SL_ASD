@@ -1,28 +1,24 @@
 train:
-
-  seg_type: &seg_type gt
+  seg_type: groundtruth
 
   # Directories and paths
-  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/${seg_type}/annot"
-  data_path: "/mnt/parscratch/users/acp21jrc/sl_FVA/dataset/Ego4D/${seg_type}"
-  save_dir: "checkpoints/${seg_type}"
+  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot"
+  data_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/groundtruth"
+  save_dir: "checkpoints/groundtruth"
   encoder_weights: "/mnt/parscratch/users/acp21jrc/sl_FVA/outputs/Ego4D/sl_project_2/SL2/_map[64.65].pkl"
 
 inference:
-
-  seg_type: &seg_type pyannote_MD-0.0 # front-end segmentation method: #pyannote_MD-0.0 #'groundtruth' #'silero' #'pyannote_MD-0.5' 
-    
+  seg_type: groundtruth
 
   # Directories and paths
-  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/${seg_type}/annot"
-  checkpoint_path: "checkpoints/${seg_type}/AP_[70.0%].pth"
-  output_path: "outputs/${seg_type}"
-  data_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/dataset/Ego4D/${seg_type}/"
-  asd_res_path: "/users/acp21jrc/Light-ASD_Ego4D/output/results" # asd results of baseline ASD system
-  bbox_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/bbox" # bbox .json annotation
-  annotPath: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/csv" # asd csv annotation
+  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot"
+  checkpoint_path: "checkpoints/groundtruth/AP_[70.0%].pth"
+  output_path: "outputs/groundtruth"
+  data_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/dataset/Ego4D/groundtruth"
+  asd_res_path: "/users/acp21jrc/Light-ASD_Ego4D/output/results"
+  bbox_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/bbox"
+  annotPath: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/csv"
   audio_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/wave"
   bigAnnotPath: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/annotations"
-  output_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0"
+  # output_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0"
   encoder_weights: "/mnt/parscratch/users/acp21jrc/sl_FVA/outputs/Ego4D/sl_project_2/SL2/_map[64.65].pkl"
-    

@@ -11,7 +11,7 @@ import argparse
 from typing import Dict
 import torch
 import wandb
-import Path
+from pathlib import Path
 import yaml
 
 from dataloader import get_dataloader
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     config['visible_only'] = True # False # (True ignores -1 and 0, i.e. miscellaneous background voice, and camera-wearer voice, respectively)
     
     # Load config
-    CONFIG_PATH = Path(__file__) / "configs/voice_extract.yml"
+    CONFIG_PATH = "configs/sl_ASD.yml"
     with open(CONFIG_PATH, 'r') as f:
         paths = yaml.safe_load(f)['train']
     config = {**config, **paths}

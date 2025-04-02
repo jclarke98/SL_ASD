@@ -10,7 +10,7 @@ evaluate_with_recall evalutes for utterances in the dataset (including those mis
 utterance segmentation front-end), and also evaluates the performance of the front-end segmentation
 method in terms of recall.
 
-evaluate just evalutes by the AP of the output path, identity agnostically.
+evaluate just evalutes by theAP of the output path, identity agnostically.
 """
 
 import warnings

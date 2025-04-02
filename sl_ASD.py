@@ -83,8 +83,17 @@ class Model:
             # print('masks: ', masks.shape)
             # print('labels: ', labels.shape)
 
+            # check for nan and inf in faces, or voices.
+            if torch.isnan(faces).any() or torch.isinf(faces).any():
+                print('faces has nan or inf')
+                print(asshole)
+            if torch.isnan(voices).any() or torch.isinf(voices).any():
+                print('voices has nan or inf')
+                print(voices)
+                print(asshole)
+
         
-           # Forward pass
+            # Forward pass
             with torch.no_grad():  # Encoder remains frozen
                 voice_embs = self.encoder.voice_encoder(voices)
                 face_embs = self.encoder.face_encoder(faces)    
@@ -98,7 +107,6 @@ class Model:
                 logits,
                 labels
             )
-            # print(pred_score)
             # print('***************************************88')
             # print('')
             # Backward pass
@@ -390,7 +398,7 @@ class Model:
                 self.best_bap_epoch = epoch
                 os.makedirs(self.config['save_dir'], exist_ok=True)
                 torch.save(self.decoder.state_dict(), 
-                         os.path.join(self.config['save_dir'], f"AP_[{round(val_bap,1)*100}%].pth"))
+                         os.path.join(self.config['save_dir'], f"AP_[{round(val_bap,2)*100}%].pth"))
                 
             # Early stopping
             if (epoch - self.best_bap_epoch) > self.config['patience']:

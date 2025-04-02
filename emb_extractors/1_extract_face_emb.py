@@ -1,5 +1,8 @@
 # adapted from https://github.com/my-yy/sl_icmr2022/blob/main/scripts/1_extract_face_emb.py
+# from PIL import ImageFile
+# ImageFile.LOAD_TRUNCATED_IMAGES = True  # This line must come before other imports
 
+# Rest of your original code
 import os
 import yaml
 from pathlib import Path
@@ -11,9 +14,11 @@ from extractor_utils.pickle_util import save_pickle
 from models import incep
 import pandas as pd
 import glob
+import numpy as np
 
 # Load config
-CONFIG_PATH = Path(__file__).parent.parent / "configs/face_extract.yml"
+BASE_DIR = Path(__file__).resolve().parent.parent
+CONFIG_PATH = BASE_DIR / "configs/face_extract.yml"
 with open(CONFIG_PATH, 'r') as f:
     config = yaml.safe_load(f)['face_extract']
 
@@ -24,6 +29,15 @@ def handle_emb_batch(all_data, batch_emb, indexies):
     indexies = indexies.detach().cpu().numpy().tolist()
     for idx, emb in zip(indexies, batch_emb):
         filepath = all_data[idx]
+        # if the embedding contains nan or inf print filepath
+        if not (np.isfinite(emb).all()):
+            print(filepath)
+            print(emb)
+            print(asshole)
+        if np.isnan(emb).any():
+            print(filepath)
+            print(emb)
+            print(asshole)
         the_dict[filepath] = emb
         
 def collate_img_files(videoid2trackid, data_path):
@@ -55,6 +69,7 @@ if __name__ == '__main__':
     model.eval()
 
     # 2. Load manifest
+    seg_type = config['manifest_file'].split('/')[-3] # type of frontend segmentation method used
     df = pd.read_csv(config['manifest_file'])
     all_jpgs = df['path'].tolist()
 
@@ -62,5 +77,6 @@ if __name__ == '__main__':
     fun(config['n_dataloader_thread'], all_jpgs, config['batch_size'])
 
     # 4. Save
-    os.makedirs(config['save_path'], exist_ok=True)
-    save_pickle(os.path.join(config['save_path'], 'face_input.pkl'), the_dict)
+    full_path = os.path.join(config['save_path'], seg_type)
+    os.makedirs(full_path, exist_ok=True)
+    save_pickle(os.path.join(full_path, 'face_input.pkl'), the_dict)

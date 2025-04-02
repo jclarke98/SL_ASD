@@ -84,7 +84,7 @@ def process_audio_file(clip, config):
     valid_segments = [s for s in formatted_segments 
                      if (s['end'] - s['start']) >= config.min_utterance_duration]
     
-    clip_output_dir = config.output_direc / "audio_groundtruth" / clip['clip_uid']
+    clip_output_dir = config.output_direc / "audio" / clip['clip_uid']
 
     # Define custom ID formatter for ground truth segments
     def gt_formatter(basename, start, end, speaker_id):

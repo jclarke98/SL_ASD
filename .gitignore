@@ -1,4 +1,6 @@
 **/__pycache__/
 **/ecapa_acc0.9854.pkl
+**/*.pkl
+**/*.pth
 **/dw
 .gitignore

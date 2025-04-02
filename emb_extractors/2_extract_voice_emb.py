@@ -11,8 +11,10 @@ from extractor_utils import model_util
 import extractor_utils.voice_loader as voice_loader
 import numpy
 
+
 # Load config
-CONFIG_PATH = Path(__file__).parent.parent / "configs/voice_extract.yml"
+BASE_dir = Path(__file__).resolve().parent.parent
+CONFIG_PATH = BASE_dir / "configs/voice_extract.yml"
 with open(CONFIG_PATH, 'r') as f:
     config = yaml.safe_load(f)['voice_extract']
 
@@ -27,9 +29,11 @@ def generate_emb_dict(wav_list):
         try:
             core_step(data, lens, model, keys, the_dict)
         except Exception as e:
-            print(keys)
             print("error:", e)
-            continue
+            print(keys)
+            print(data)
+            print(lens)
+            raise
     return the_dict
 
 def core_step(wavs, lens, model, keys, the_dict):
@@ -37,6 +41,11 @@ def core_step(wavs, lens, model, keys, the_dict):
         feats = fun_compute_features(wavs.cuda())
         feats = fun_mean_var_norm(feats, lens)
         embedding = model(feats, lens)
+        # check for nan in embedding
+        if torch.isnan(embedding).any():
+            print("nan in embedding")
+            print(keys)
+            print(asshole)
         embedding_npy = embedding.detach().cpu().numpy().squeeze()
     if len(embedding_npy.shape) == 1:
         embedding_npy = embedding_npy[numpy.newaxis, :]

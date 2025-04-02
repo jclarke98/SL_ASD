@@ -20,10 +20,13 @@ class Dataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         file_path = self.all_image_files[index]
-        img_PIL = Image.open(file_path)
-        if img_PIL.mode != "RGB":
-            img_PIL = img_PIL.convert("RGB")
-
-        data = self.transform_fn(img_PIL)
-        assert data.shape == (3, 128, 128), file_path
-        return data, index
+        try:
+            img_PIL = Image.open(file_path)
+            if img_PIL.mode != "RGB":
+                img_PIL = img_PIL.convert("RGB")
+            data = self.transform_fn(img_PIL)
+            assert data.shape == (3, 128, 128), file_path
+            return data, index
+        except Exception as e:
+            print(f"Error occurred while processing file: {file_path}")
+            raise

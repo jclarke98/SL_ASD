@@ -184,9 +184,9 @@ class SpeakerAwareDataset(Dataset):
         voice_embs = [self.name2voice_emb.get(utt_id, np.full((192), 1)) for utt_id in batch['utt_ids']]
         # check for tensor of 1s and print warning
         voice_tensor = torch.stack([torch.from_numpy(emb) for emb in voice_embs]).to(torch.float32)
-        for emb in voice_tensor:
-            if torch.all(emb == 1):
-                print('Warning: voice embedding is all 1s')
+        # for emb in voice_tensor:
+            # if torch.all(emb == 1):
+                # print('Warning: voice embedding is all 1s')
 
         # Process face embeddings for each speaker group
         max_samples = max([len(img_paths) for _, img_paths in batch['image_info']]) 

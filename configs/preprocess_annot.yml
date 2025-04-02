@@ -11,7 +11,7 @@ gt:
   val_ratio: 0.1                 # Fraction of training videos for validation
 
   # Image processing settings
-  process_images: True
+  process_images: False
   img_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs"
   annot_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d"
 
@@ -23,7 +23,7 @@ pyannote:
 
   # Pyannote diarization parameters
   pyannote_pipeline: pyannote/speaker-diarization-3.1
-  pyannote_device: cpu
+  pyannote_device: cuda
   hf_auth_token: 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
 
   # Utterance segmentation parameters
@@ -36,6 +36,6 @@ pyannote:
   val_ratio: 0.0
 
   # Image processing settings
-  process_images: false
+  process_images: True
   img_path: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs
   annot_path: /users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d
