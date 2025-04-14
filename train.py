@@ -95,8 +95,8 @@ if __name__ == "__main__":
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=10000)
     parser.add_argument('--lr', type=float, default=1e-4) # 5e-5
-    parser.add_argument('--lr_decay', type=float, default=0.9)
-    parser.add_argument('--lr_step_size', type=int, default=2)
+    parser.add_argument('--lr_decay', type=float, default=0.9) # 0.9
+    parser.add_argument('--lr_step_size', type=int, default=2) # 2
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--num_heads', type=int, default=4)
     parser.add_argument('--num_layers', type=int, default=1)

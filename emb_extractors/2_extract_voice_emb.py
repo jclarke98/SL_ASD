@@ -41,11 +41,6 @@ def core_step(wavs, lens, model, keys, the_dict):
         feats = fun_compute_features(wavs.cuda())
         feats = fun_mean_var_norm(feats, lens)
         embedding = model(feats, lens)
-        # check for nan in embedding
-        if torch.isnan(embedding).any():
-            print("nan in embedding")
-            print(keys)
-            print(asshole)
         embedding_npy = embedding.detach().cpu().numpy().squeeze()
     if len(embedding_npy.shape) == 1:
         embedding_npy = embedding_npy[numpy.newaxis, :]

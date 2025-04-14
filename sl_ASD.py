@@ -10,6 +10,65 @@ import wandb
 from loss import lossAV
 import json
 
+from collections import defaultdict, Counter
+
+
+def verify_lengths(trackids2scores, utt_id2concurrent_tracks, trackid_lengths):
+    """
+    Necessary because certain frames in the groundtruth inference annotation are duplicated.
+    """
+    # Precompute a dictionary to map each trackid to its corresponding utt_id
+    trackid_to_utt_id = {}
+    for utt_id, tracks in utt_id2concurrent_tracks.items():
+        for trackid in tracks:
+            trackid_to_utt_id[trackid] = utt_id
+
+    for trackid in trackids2scores:
+        current_len = len(trackids2scores[trackid])
+        expected_len = trackid_lengths[trackid]
+        if current_len != expected_len:
+            print(f"Track length mismatch for {trackid}: {current_len} vs {expected_len}")
+            # Efficiently retrieve the related utt_id using the precomputed dictionary
+            rel_utt_id = trackid_to_utt_id.get(trackid)
+            if rel_utt_id is None:
+                print(f"Trackid {trackid} not found in any utt_id")
+                continue
+            
+            # Extract frames from the concurrent tracks data
+            utt_track = utt_id2concurrent_tracks[rel_utt_id][trackid]
+            frames = [frame['frame'] for frame in utt_track]
+            
+            # Use Counter to efficiently find duplicate frames
+            frame_counts = Counter(frames)
+            duplications = [frame for frame, count in frame_counts.items() if count > 1]
+            duplications = [frame for frame in set(duplications) for _ in range(frame_counts[frame] - 1)]
+            
+            # Precompute entries grouped by their frame for quick lookup
+            entries_by_frame = defaultdict(list)
+            for entry in trackids2scores[trackid]:
+                entries_by_frame[entry['frame']].append(entry)
+            
+            # Collect all entries that need to be duplicated
+            entries_to_duplicate = []
+            for frame in duplications:
+                entries_to_duplicate.extend(entries_by_frame.get(frame, []))
+            
+            # Extend the list in one go and sort
+            trackids2scores[trackid].extend(entries_to_duplicate)
+            trackids2scores[trackid].sort(key=lambda x: x['frame'])
+
+    # Final validation
+    for trackid in trackids2scores:
+        expected_length = trackid_lengths[trackid]
+        actual_length = len(trackids2scores[trackid])
+        assert expected_length == actual_length, (
+            f"Track length mismatch for {trackid}: {actual_length} vs {expected_length}"
+        )
+
+    return trackids2scores
+        
+
+
 class Model:
     """Main training class handling model training, evaluation, and inference"""
     
@@ -241,6 +300,14 @@ class Model:
         
         trackids2scores = {}
         max_score_acc = []
+        # find the length of all the tracks in utt_id2concurrent_tracks
+        trackid_lengths = {}
+        for utt_id in utt_id2concurrent_tracks:
+            for trackid in utt_id2concurrent_tracks[utt_id]:
+                if trackid not in trackid_lengths:
+                    trackid_lengths[trackid] = len(utt_id2concurrent_tracks[utt_id][trackid])
+                else:
+                    assert len(utt_id2concurrent_tracks[utt_id][trackid]) == trackid_lengths[trackid], f"Track length mismatch for {trackid}"
 
         # 1. Generate predictions for all utterances
         for batch in tqdm(self.test_loader, desc="Inference"):
@@ -279,6 +346,11 @@ class Model:
                 for frame in utt_id2concurrent_tracks[utt_id][trackid]:
                     if frame['concurrent']:
                         frame_counter[frame['frame']] += 1
+
+            # check whether all concurrent tracks occur from the same video clip
+            assert len(
+                set(trackid[:36] for trackid in concur_trackids)
+                ) == 1, 'concurrent tracks are not from the same video clip therefore need absolute frame indexing'
 
             # Process all concurrent tracks
             for trackid in concur_trackids:
@@ -322,9 +394,9 @@ class Model:
                 else:
                     unique_frames[frame] = entry
             trackids2scores[trackid] = sorted(unique_frames.values(), key=lambda x: x['frame'])
-
-        # Validate track lengths
-        assert all(len(frames) <= 305 for frames in trackids2scores.values()), "Track length exceeds 305 frames"
+                
+        # verify lengths of trackids2scores
+        trackids2scores = verify_lengths(trackids2scores, utt_id2concurrent_tracks, trackid_lengths)
 
         # Save results
         for trackid, scores in trackids2scores.items():
@@ -333,6 +405,9 @@ class Model:
             with open(dest_file, 'w') as f:
                 json.dump(scores, f, indent=4)
 
+
+
+        # calculate the mAP
         print(f'Max score accuracy: {sum(max_score_acc)/len(max_score_acc):.4f}')
         print(f"Inference completed. Results saved to {save_path}")
         

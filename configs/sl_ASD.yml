@@ -3,18 +3,25 @@ train:
 
   # Directories and paths
   annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot"
+  # annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0/annot"
   data_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/groundtruth"
-  save_dir: "checkpoints/groundtruth"
+  # data_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/pyannote_MD-0.0"
+  # save_dir: "checkpoints/groundtruth"
+  save_dir: "checkpoints/pyannote_MD-0.0"
   encoder_weights: "/mnt/parscratch/users/acp21jrc/sl_FVA/outputs/Ego4D/sl_project_2/SL2/_map[64.65].pkl"
-
+  
 inference:
-  seg_type: groundtruth
+  seg_type: groundtruth # pyannote_MD-0.0
 
   # Directories and paths
-  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot"
-  checkpoint_path: "checkpoints/groundtruth/AP_[70.0%].pth"
-  output_path: "outputs/groundtruth"
-  data_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/dataset/Ego4D/groundtruth"
+  # annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot"
+  annotation_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0_visible/annot"
+  checkpoint_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/checkpoints/groundtruth/AP_[70.0%].pth"
+  # checkpoint_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/checkpoints/pyannote_MD-0.0/AP_[69.0%].pth"
+  # output_path: "outputs/groundtruth"
+  output_path: "outputs/pyannote_MD-0.0_visible"
+  # data_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/groundtruth"
+  data_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/pyannote_MD-0.0_visible"
   asd_res_path: "/users/acp21jrc/Light-ASD_Ego4D/output/results"
   bbox_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/bbox"
   annotPath: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/infer/csv"

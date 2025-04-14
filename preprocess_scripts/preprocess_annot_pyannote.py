@@ -67,6 +67,36 @@ from preprocess_utils import (
 
 from pyannote.audio import Pipeline
 
+from time import time
+
+
+def is_speaker_visible(video, seg, fps=30):
+    """Determine if speaker was visible during their utterance.
+    
+    Args:
+        video: The video annotation dictionary
+        seg: Current social segment dictionary
+        default_fps: Fallback FPS if not found in video data
+    
+    Returns:
+        bool: True if speaker was visible during utterance, False otherwise
+    """
+    person_id = seg["person"]
+    seg_start = seg["start_time"]
+    seg_end = seg["end_time"]
+    
+    # Find matching person in video annotations
+    for person in video.get('persons', []):
+        if person.get('person_id') == person_id:
+            # Check all tracking paths for this person
+            for track in person.get('tracking_paths', []):
+                for entry in track.get('track', []):
+                    # Convert video frame to time if available
+                    if 'frame' in entry and entry['frame'] is not None:
+                        entry_time = entry['frame'] / fps
+                        if seg_start <= entry_time <= seg_end:
+                            return True
+    return False
 
 # =============================================================================
 # Core Processing Function
@@ -113,7 +143,12 @@ def process_audio_file(video, config, pipeline):
     # Assume video contains a key "social_segments_talking" with list of segments.
     gt_speech = {}
     for seg in video.get("social_segments_talking", []):
+        if not is_speaker_visible(video, seg):
+            continue
         person = seg["person"]
+        # if person in {"0", "-1"}: # add way of skipping utterances which appear off-screen
+        #     continue
+        # check if the utterance occurs on-screen
         start = seg["start_time"]
         end = seg["end_time"]
         gt_speech.setdefault(person, []).append((start, end))
@@ -155,6 +190,13 @@ def main():
     config = Config(**config)
     os.makedirs(config.output_direc, exist_ok=True)
     
+    # empty the audio directory
+    audio_dir = config.output_direc / "audio"
+    if audio_dir.exists():
+        print('Emptying audio directory...')
+        c_time = str(int(time()))
+        os.system(f'mv {audio_dir} /mnt/parscratch/users/acp21jrc/rubbish/{c_time}')
+
     # Load ground truth annotations.
     annotations, clip2split = load_annotations(config.bigAnnotPath)
     

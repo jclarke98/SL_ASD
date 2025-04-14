@@ -4,3 +4,6 @@
 **/*.pth
 **/dw
 .gitignore
+outputs/
+visualisations/
+**/overlap_matrix.npy

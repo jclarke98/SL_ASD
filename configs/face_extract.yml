@@ -1,9 +1,9 @@
 # Face embedding extractor parameters
 face_extract:
   batch_size: 2048
-  data_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/imgs"                                # User fills this
-  manifest_file: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth/annot/image_manifest.csv"       # Path to CSV with audio/video metadata
-  save_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D"                                       # Where to save embeddings
+  data_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0/imgs"                                # User fills this
+  manifest_file: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0/annot/image_manifest.csv"        # Path to CSV with audio/video metadata
+  save_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D"                                           # Where to save embeddings
   n_dataloader_thread: 12
   model_settings:
     pretrained: "vggface2"
