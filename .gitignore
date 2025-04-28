@@ -1,5 +1,5 @@
 **/__pycache__/
-**/annot_loaders_corect.py
+utils/annot_loaders_corect.py
 **/ecapa_acc0.9854.pkl
 **/*.pkl
 **/*.pth
