@@ -87,7 +87,7 @@ if __name__ == "__main__":
     model.eval()
     fun_compute_features = get_fun_compute_features().cuda()
     fun_mean_var_norm = get_fun_norm().cuda()
-
+    
     # 2. Get audio files
     seg_type = config['manifest_file'].split('/')[-3] # type of frontend segmentation method used
     df = pd.read_csv(config['manifest_file'])

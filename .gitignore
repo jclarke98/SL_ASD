@@ -1,10 +1,11 @@
 **/__pycache__/
-utils/annot_loaders_corect.py
-**/ecapa_acc0.9854.pkl
-**/*.pkl
-**/*.pth
-**/dw
-.gitignore
+checkpoints/
+dataset/
 outputs/
+**/*.json
+**/dw 
+**/*AVA*
 visualisations/
 **/overlap_matrix.npy
+**/*actual*
+**/*.ipynb

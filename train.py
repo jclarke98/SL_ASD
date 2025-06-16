@@ -41,7 +41,8 @@ def main(config: Dict):
         visible_only=config['visible_only']
     )
     val_loader = get_dataloader(
-        utt_ids=splits['test'],
+        utt_ids=splits['val'],
+        # utt_ids=splits['test'],  # Use test split for validation
         name2voice_emb=name2voice_emb,
         name2face_emb=name2face_emb,
         uttid2clipid=uttid2clipid,

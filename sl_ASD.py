@@ -145,11 +145,11 @@ class Model:
             # check for nan and inf in faces, or voices.
             if torch.isnan(faces).any() or torch.isinf(faces).any():
                 print('faces has nan or inf')
-                print(asshole)
+                raise ValueError("Faces tensor contains NaN or Inf values")
+
             if torch.isnan(voices).any() or torch.isinf(voices).any():
                 print('voices has nan or inf')
-                print(voices)
-                print(asshole)
+                raise ValueError("Voices tensor contains NaN or Inf values")
 
         
             # Forward pass
@@ -292,10 +292,11 @@ class Model:
         _, bap, max_score_acc = self._eval_operations(all_scores, all_labels)
         return avg_loss, bap, max_score_acc
     
-    def run_inference(self, utt_id2concurrent_tracks: Dict[str, Dict[str, Any]]):
+    def run_inference(self, utt_id2concurrent_tracks: Dict[str, Dict[str, Any]],
+                      masking_prob: float = 0.0) -> None:
         """Run inference on test set and save predictions with ASD output integration."""
         self.decoder.eval()
-        save_path = self.config['output_path']
+        save_path = os.path.join(self.config['output_path'], str(masking_prob))
         os.makedirs(save_path, exist_ok=True)
         
         trackids2scores = {}

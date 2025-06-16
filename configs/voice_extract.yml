@@ -4,8 +4,8 @@ voice_extract:
   # types: groundtruth; pyannote_MD-0.0
 
   batch_size: 16
-  data_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0_visible/audio"                                  # Path to audio files
-  manifest_file: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0_visible/annot/audio_manifest.csv"           # CSV with 'fpath' column
-  save_path: "/mnt/parscratch/users/acp21jrc/sl_ASD_github/dataset/Ego4D/"                                         # Embedding output directory
-  model_path: "/mnt/parscratch/users/acp21jrc/sl_FVA_ASD/emb_extractors/models/ecapa_acc0.9854.pkl"                # Path to pretrained ECAPA-TDNN model
+  data_path:   # Path to audio files
+  manifest_file:    # CSV with 'fpath' column
+  save_path:     # Embedding output directory
+  model_path:  # Path to pretrained ECAPA-TDNN model
   n_dataloader_thread: 12

@@ -1,8 +1,8 @@
 gt:
   # Directories and paths
-  audio_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/wave"
-  bigAnnotPath: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/annotations" 
-  output_direc: "/mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/groundtruth"
+  audio_direc: # path to ego4d_data/v2/data/wave
+  bigAnnotPath: # path to ego4d_data/v2/annotations 
+  output_direc: # path to ego4d_data/sl_ASD/groundtruth
 
   # Utterance segmentation parameters
   min_utterance_duration: 0      # Minimum duration (seconds) for an utterance #0.1
@@ -12,30 +12,30 @@ gt:
 
   # Image processing settings
   process_images: False
-  img_path: "/mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs"
-  annot_path: "/users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d"
+  img_path: # path to ego4d_data/v2/data/video_imgs # location to video images 
+  annot_path: # path to ego4d/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d # location to bbox annotation
 
 pyannote:
   # Directories and paths
-  audio_direc: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/wave
-  bigAnnotPath: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/annotations
-  output_direc: /mnt/parscratch/users/acp21jrc/ego4d_data/sl_ASD/pyannote_MD-0.0_visible
+  audio_direc: # path to ego4d whole clip audios 
+  bigAnnotPath: # path to big ego4d annotation files (av_train.json, av_val.json ...)
+  output_direc: # where to output the preprocessed annotation files, clipped audio files, and bounding box face images
 
   # Pyannote diarization parameters
   pyannote_pipeline: pyannote/speaker-diarization-3.1
   pyannote_device: cuda
-  hf_auth_token: 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
+  hf_auth_token: 
 
-  # Utterance segmentation parameters [s]
-  min_utterance_duration: 0.01
+  # Utterance segmentation parameters 
+  min_utterance_duration: 0.01 # Minimum duration (seconds) for an utterance #0.1
 
   # Matching hyperparameter (overlap threshold for matching hypothesis and ground truth) [%]
   overlap_threshold: 0.15 # 0.1
 
   # Manifest and split settings
-  val_ratio: 0.0
+  val_ratio: 0.1
 
   # Image processing settings
   process_images: False
-  img_path: /mnt/parscratch/users/acp21jrc/ego4d_data/v2/data/video_imgs
-  annot_path: /users/acp21jrc/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d
+  img_path: # path to ego4d full-scene images 
+  annot_path: # path to ego4d/audio-visual/active-speaker-detection/active_speaker/TalkNet_ASD/Ego4d_TalkNet_ASD/data/ego4d # bbox annotation path

@@ -40,9 +40,6 @@ class SpeakerMatcher:
             self.compute_overlap_matrix()
         # Use Hungarian algorithm (maximize overlap -> minimize negative overlap)
         cost_matrix = -self.overlap_matrix
-        # # save the self.overlap_matrix for debugging
-        # np.save('overlap_matrix.npy', self.overlap_matrix)
-        # print(asshole)
         hyp_indices, gt_indices = linear_sum_assignment(cost_matrix)
         self.matches = []
         for h, g in zip(hyp_indices, gt_indices):

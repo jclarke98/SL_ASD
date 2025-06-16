@@ -37,11 +37,12 @@ from sl_ASD import Model
 from collections import defaultdict
 import matplotlib.pyplot as plt
 
-def evaluate_with_recall(output_path, asd_results_path, csv_path, neg_threshold=None): # AP
+def evaluate_with_recall(output_path, asd_results_path, csv_path, neg_threshold=None,
+                         masking_prob=0.0): # AP
     fname = 'active_speaker_test.csv'
     labels = ['trackid', 'duration', 'fps', 'labels', 'start_frame']
     df = pd.read_csv(f'{csv_path}/{fname}', names=labels, delimiter='\t')
-
+    output_path = os.path.join(output_path, str(masking_prob))
     hyp = []
     ref = []
     n = 0
@@ -93,15 +94,15 @@ def evaluate_with_recall(output_path, asd_results_path, csv_path, neg_threshold=
     print('average length of missed labels: ', sum(label_length)/len(label_length)/30, 'seconds')
 
 
-def evaluate(output_path):
+def evaluate(output_path, masking_prob=0.0):
     # calculate mAP of just output path, identity agnostically
     hyp = []
     ref = []
+    output_path = os.path.join(output_path, str(masking_prob))
     print('total amount of output files: ', len(glob(f'{output_path}/*.json')))
     for trackid in tqdm(glob(f'{output_path}/*.json')):
         with open(trackid, 'r') as f:
             result = json.load(f)
-        # scrs = [1 if frame['score'] >= 0.01 else 0 for frame in result]
         scrs = [float(frame['score']) for frame in result]
         labs = [int(frame['activity']) for frame in result]
         clipid = trackid.split('/')[-1][:36]
@@ -115,139 +116,6 @@ def evaluate(output_path):
                 continue
     print("Evaluation metric (AP):", average_precision_score(ref, hyp))
 
-    # # delelte the output_path folder
-    # c_time = str(int(time.time()))
-    # os.system(f'mv {output_path} /mnt/parscratch/users/acp21jrc/rubbish/{c_time}')
-
-
-# def evaluate(output_path):
-#     """Calculate mAP stratified by clip ID with timeline visualizations."""
-#     clips_dict = defaultdict(lambda: {'hyp': [], 'ref': []})
-#     json_files = glob(f'{output_path}/*.json')
-#     print(f'Total amount of output files: {len(json_files)}')
-
-#     for track_path in tqdm(json_files, desc='Processing clips'):
-#         with open(track_path, 'r') as f:
-#             result = json.load(f)
-        
-#         clip_id = os.path.basename(track_path)[:36]
-#         track_id = os.path.splitext(os.path.basename(track_path))[0]
-        
-#         # Data collection for both evaluation and visualization
-#         times, scores, activities = [], [], []
-#         for i, frame in enumerate(result):
-#             # Collect evaluation metrics
-#             clips_dict[clip_id]['hyp'].append(float(frame['score']))
-#             clips_dict[clip_id]['ref'].append(int(frame['activity']))
-        
-#             # Collect visualization data
-#             times.append(float(i))  # Assuming 'time' field exists
-#             scores.append(float(frame['score']))
-#             activities.append(int(frame['activity']))
-            
-#         # Generate timeline visualization
-#         if times:
-#             plt.figure(figsize=(15, 5))
-            
-#             # Plot ground truth activity
-#             plt.step(times, activities, where='post', 
-#                     label='Ground Truth', color='#2ca02c', linewidth=2)
-            
-#             # Plot predicted scores
-#             plt.plot(times, scores, label='Predicted Score', 
-#                    color='#1f77b4', alpha=0.7, linewidth=1.5)
-#             plt.ylim(-0.05, 1.1)
-#             plt.xlabel('Time (seconds)', fontsize=12)
-#             plt.ylabel('Activity/Score', fontsize=12)
-#             plt.title(f'{track_id}\nActivity vs Prediction', fontsize=14)
-#             plt.legend(loc='upper right')
-#             plt.grid(alpha=0.3)
-#             plt.tight_layout()
-
-#             # Save visualization
-#             vis_dir = os.path.join('visualisations', clip_id)
-#             os.makedirs(vis_dir, exist_ok=True)
-#             plt.savefig(os.path.join(vis_dir, f'{track_id}.png'), 
-#                       dpi=150, bbox_inches='tight')
-#             plt.close()
-
-#     # Existing evaluation metrics calculation
-#     ap_results = {}
-#     for clip_id, data in clips_dict.items():
-#         if not data['ref']:
-#             continue
-#         try:
-#             ap = average_precision_score(data['ref'], data['hyp'])
-#             ap_results[clip_id] = ap
-#         except ValueError as e:
-#             print(f"Error calculating AP for {clip_id}: {e}")
-#             continue
-
-#     if not ap_results:
-#         print("No valid clips for evaluation")
-#         return 0.0
-
-#     mean_ap = sum(ap_results.values()) / len(ap_results)
-#     print("\nClip-wise AP Scores:")
-#     for clip_id, ap in ap_results.items():
-#         print(f"{clip_id}: {ap:.4f}")
-    
-#     print(f"\nMean Average Precision (mAP): {mean_ap:.4f}")
-#     # delelte the output_path folder
-#     c_time = str(int(time.time()))
-#     os.system(f'mv {output_path} /mnt/parscratch/users/acp21jrc/rubbish/{c_time}')
-    
-#     return mean_ap
-
-
-    
-# def evaluate(output_path):
-#     # Dictionary to hold scores and labels per class (pid)
-#     results_by_pid = {}
-
-#     print('Total amount of output files:', len(glob(f'{output_path}/*.json')))
-#     for trackid in tqdm(glob(f'{output_path}/*.json')):
-#         with open(trackid, 'r') as f:
-#             result = json.load(f)
-#         clipid = trackid.split('/')[-1][:36]
-#         for frame in result:
-#             try:
-#                 score = float(frame['score'])
-#                 label = int(frame['activity'])
-#                 pid = str(frame['pid'])
-#                 # Create a unique class identifier by combining clipid and pid.
-#                 unique_id = clipid + pid
-                
-#                 # If this unique_id hasn't been seen, initialize lists
-#                 if unique_id not in results_by_pid:
-#                     results_by_pid[unique_id] = {"scores": [], "labels": []}
-
-#                 results_by_pid[unique_id]["scores"].append(score)
-#                 results_by_pid[unique_id]["labels"].append(label)
-#             except KeyError:
-#                 print(f"Missing 'score' or 'activity' in segment: {frame}")
-#                 continue
-
-#     # Compute average precision for each class
-#     ap_values = []
-#     for unique_id, data in results_by_pid.items():
-#         # Only compute AP if there is at least one positive sample
-#         if sum(data["labels"]) > 0:
-#             ap = average_precision_score(data["labels"], data["scores"])
-#             ap_values.append(ap)
-#         else:
-#             # If there are no positive labels, average precision is undefined.
-#             # Here we define it as 0.0 (or you could choose to skip it).
-#             ap_values.append(0.0)
-
-#     # Calculate the mean Average Precision (mAP)
-#     if ap_values:
-#         mean_ap = sum(ap_values) / len(ap_values)
-#     else:
-#         mean_ap = 0.0
-
-#     print("Evaluation metric (mAP):", mean_ap)
-
 
 def main(config: Dict):
     """Main training workflow"""
@@ -256,7 +124,8 @@ def main(config: Dict):
     splits, uttid2clipid, clip_id2spk_id2img_paths = annot_loaders.load_annotations(config['annotation_path'])
     name2voice_emb, name2face_emb = annot_loaders.load_embeddings(config['data_path'])
     clip_ids = set([utt_id.split('_clipped')[0] for utt_id in splits['test']])
-    utt_id2concurrent_tracks = annot_loaders.load_manifest(clip_ids, config['annotation_path'], config['bbox_path'], config['frame_rate']) 
+    utt_id2concurrent_tracks = annot_loaders.load_manifest(clip_ids, config['annotation_path'], config['bbox_path'], config['frame_rate'],
+                                                           masking_prob=config['masking_prob']) 
     test_loader = get_dataloader(
         utt_ids=splits['test'],
         name2voice_emb=name2voice_emb,
@@ -299,7 +168,7 @@ def main(config: Dict):
 
     
     # Run inference
-    inferer.run_inference(utt_id2concurrent_tracks)
+    inferer.run_inference(utt_id2concurrent_tracks, masking_prob=config['masking_prob'])
 
 
 if __name__ == "__main__":
@@ -307,6 +176,7 @@ if __name__ == "__main__":
     # data-loader
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--frame_rate', type=int, default=30, help='Frame rate of the video data')
+    parser.add_argument('--masking_prob', type=float, default=0.0)
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=100000)
     parser.add_argument('--num_heads', type=int, default=4)
@@ -325,5 +195,10 @@ if __name__ == "__main__":
 
     # Run training
     main(config)
-    evaluate_with_recall(config['output_path'], asd_results_path=config['bbox_path'], csv_path = config['annotPath'], neg_threshold=0.1)
-    evaluate(config['output_path'])
+    evaluate_with_recall(config['output_path'], 
+                         asd_results_path=config['bbox_path'], 
+                         csv_path = config['annotPath'], 
+                         neg_threshold=0.1,
+                         masking_prob=config['masking_prob'])
+    evaluate(config['output_path'], 
+             masking_prob=config['masking_prob'])

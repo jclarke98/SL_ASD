@@ -86,7 +86,7 @@ class SpeakerAwareDataset(Dataset):
 
             if self.visible_only:
                 if speaker_id in {"0", "-1"}:  # Skip utterances from camera wearer and never-visible voices
-                    print('non-visible speaker detected and skipping')
+                    # print('non-visible speaker detected and skipping')
                     continue
             else:
                 if speaker_id in {"-1"}:
@@ -215,7 +215,7 @@ class SpeakerAwareDataset(Dataset):
 
             if self.visible_only:
                 if speaker_id in {"0", "-1"}:
-                    print('non-visible speaker detected and skipping')
+                    # print('non-visible speaker detected and skipping')
                     continue
             else:
                 if speaker_id in {"-1"}:

@@ -33,11 +33,11 @@ def handle_emb_batch(all_data, batch_emb, indexies):
         if not (np.isfinite(emb).all()):
             print(filepath)
             print(emb)
-            print(asshole)
+            raise ValueError("Embedding contains NaN or Inf values.")
         if np.isnan(emb).any():
             print(filepath)
             print(emb)
-            print(asshole)
+            raise ValueError("Embedding contains NaN values.")
         the_dict[filepath] = emb
         
 def collate_img_files(videoid2trackid, data_path):
