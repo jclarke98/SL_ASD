@@ -1,6 +1,6 @@
-# Audiovisual Speaker Diarisation in Egocentric Settings
+# Face-Voice Association for Audiovisual Active Speaker Detection in Egocentric Recordings
 
-This repository implements a pipeline for audiovisual speaker diarisation in egocentric video. It identifies and segments utterances by visible speakers through joint face and voice embedding extraction, followed by model training for speaker attribution.
+This repository implements a pipeline for audiovisual active speaker detection in egocentric recordings, based on the paper Face-Voice Association for Audiovisual Active Speaker Detection in Egocentric Recordings accepted to EUSIPCO 2025. 
 
 ---
 
@@ -12,23 +12,18 @@ The pipeline consists of three major stages:
 3. **Model training SL-ASD Decoder**
 
 <p align="center">
-  <img src="docs/architecture_diagram.png" alt="Pipeline Architecture Diagram" width="80%">
+  <img src="figures/SL-ASD.png" alt="Pipeline Architecture Diagram" width="80%">
 </p>
 
 ---
 
 ## ⚙️ Installation
 
-We recommend using **conda** for environment management. To allow others to reproduce your environment:
-
-### Export your environment:
-```bash
-conda env export --no-builds > environment.yml
-```
+To reproduce environment:
 
 ### To install:
 ```bash
-conda env create -f environment.yml
+conda env create -f SL_ASD_environment.yml
 conda activate <your-env-name>
 ```
 
@@ -111,7 +106,7 @@ Choose your segmentation method:
 
 ## 📈 Results & Evaluation
 
-*Coming soon*: Benchmarks, performance metrics, and qualitative examples.
+Shown in published technical paper soon.
 
 ---
 
@@ -158,4 +153,4 @@ series = {ICMR '22}
 
 ## 📬 Contact
 
-For questions or collaboration inquiries, please contact [your_email@domain.com].
+For questions or collaboration inquiries, please contact [jclarke8@sheffield.ac.uk].
