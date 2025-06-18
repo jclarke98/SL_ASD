@@ -42,7 +42,6 @@ def main(config: Dict):
     )
     val_loader = get_dataloader(
         utt_ids=splits['val'],
-        # utt_ids=splits['test'],  # Use test split for validation
         name2voice_emb=name2voice_emb,
         name2face_emb=name2face_emb,
         uttid2clipid=uttid2clipid,

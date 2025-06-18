@@ -12,7 +12,7 @@ The pipeline consists of three major stages:
 3. **Model training SL-ASD Decoder**
 
 <p align="center">
-  <img src="figures/SL-ASD.png" alt="Pipeline Architecture Diagram" width="80%">
+  <img src="figures/SL-ASD_v0.png" alt="Pipeline Architecture Diagram" width="80%">
 </p>
 
 ---
