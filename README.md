@@ -36,7 +36,7 @@ conda activate <your-env-name>
 ├── preprocess_scripts/          # Preprocessing scripts
 ├── emb_extractors/              # Embedding extraction scripts
 ├── utils/                       # Utility scripts
-├── models/                      # Training and model-related code
+├── models/                      # model architecture code
 ├── outputs/                     # Outputs from preprocessing and training
 ├── visualisations/              # Optional visual outputs
 └── README.md
